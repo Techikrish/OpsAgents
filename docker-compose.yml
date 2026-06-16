@@ -1,0 +1,14 @@
+services:
+  opsagents:
+    build: .
+    volumes:
+      # Mount config file
+      - ./config.example.yml:/app/config.yml:ro
+      # Mount read-only AWS credentials
+      - ~/.aws:/home/opsuser/.aws:ro
+      # Mount read-only Kubernetes credentials
+      - ~/.kube:/home/opsuser/.kube:ro
+    env_file:
+      - .env
+    network_mode: host
+    restart: unless-stopped

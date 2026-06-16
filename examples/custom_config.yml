@@ -1,0 +1,29 @@
+# Custom OpsAgents Configuration Example
+
+llm:
+  provider: anthropic
+  model: claude-3-5-sonnet-latest
+  temperature: 0.2
+  max_tokens: 4096
+  fallback_provider: google
+  fallback_model: gemini-2.5-pro
+
+approval:
+  default_policy: prompt
+  risk_levels:
+    low: auto                # Auto-approve read-only queries
+    medium: prompt           # Prompts user for scaling/deployments
+    high: prompt             # Prompts user for deletions
+    critical: confirm        # Requires user to type "CONFIRM" for destructive stack tear-downs
+
+aws:
+  profile: staging-profile
+  region: us-west-2
+
+kubernetes:
+  kubeconfig: ~/.kube/config-staging
+  namespace: staging
+
+logging:
+  level: DEBUG
+  audit_trail: true

@@ -1,0 +1,90 @@
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# OpsAgents Configuration
+# Copy this file to config.yml and customize for your environment
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# ── LLM Provider Settings ────────────────────────────────────────────
+llm:
+  # Primary provider: openai | anthropic | google | bedrock | azure | ollama
+  provider: openai
+  model: gpt-4o
+  temperature: 0.1
+  max_tokens: 4096
+
+  # Fallback provider (used if primary fails)
+  fallback_provider: anthropic
+  fallback_model: claude-sonnet-4-20250514
+
+  # Ollama settings (only if provider is ollama)
+  # ollama_base_url: http://localhost:11434
+
+  # Azure settings (only if provider is azure)
+  # azure_deployment: gpt-4o
+  # azure_api_version: "2024-10-21"
+
+# ── Human-in-the-Loop Approval Settings ─────────────────────────────
+approval:
+  # Default policy: auto | prompt | strict
+  #   auto   — Auto-approve all actions (not recommended for production)
+  #   prompt — Ask for approval on medium+ risk actions (recommended)
+  #   strict — Require explicit approval for every action
+  default_policy: prompt
+
+  # Per-risk-level override
+  risk_levels:
+    low: auto          # Read-only actions (list, describe, scan)
+    medium: prompt     # Modifications (create, update, scale)
+    high: prompt       # Destructive changes (delete, terminate)
+    critical: confirm  # Critical actions require typed confirmation
+
+  # Timeout for approval prompts (seconds, 0 = no timeout)
+  timeout: 300
+
+# ── AWS Settings ─────────────────────────────────────────────────────
+aws:
+  profile: default
+  region: us-east-1
+  # Allowed regions for multi-region operations
+  # allowed_regions:
+  #   - us-east-1
+  #   - us-west-2
+  #   - eu-west-1
+
+# ── Kubernetes Settings ──────────────────────────────────────────────
+kubernetes:
+  # kubeconfig: ~/.kube/config
+  context: ""  # Empty = use current context
+  namespace: default
+
+# ── GitHub Settings ──────────────────────────────────────────────────
+github:
+  # owner: your-org
+  # repo: your-repo
+  default_branch: main
+
+# ── Infrastructure Settings ─────────────────────────────────────────
+infrastructure:
+  # Default IaC tool: terraform | cloudformation
+  default_iac: terraform
+  # Terraform working directory
+  # terraform_dir: ./infrastructure
+  # State backend: local | s3
+  # state_backend: s3
+
+# ── Monitoring Settings ─────────────────────────────────────────────
+monitoring:
+  # prometheus_url: http://localhost:9090
+  # grafana_url: http://localhost:3000
+  # datadog_site: datadoghq.com
+
+# ── Logging Settings ────────────────────────────────────────────────
+logging:
+  level: INFO  # DEBUG | INFO | WARNING | ERROR
+  file: ""     # Empty = stdout only; set path for file logging
+  audit_trail: true  # Log all approved/denied actions to audit log
+
+# ── MCP Server Settings ─────────────────────────────────────────────
+mcp:
+  transport: stdio  # stdio | sse
+  # sse_host: 0.0.0.0
+  # sse_port: 8080
